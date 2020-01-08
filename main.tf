@@ -15,7 +15,7 @@ locals {
   regex_replace_chars = coalesce(var.regex_replace_chars, var.context.regex_replace_chars)
 
   prefix             = lower(replace(coalesce(var.prefix, var.context.prefix, local.defaults.sentinel), local.regex_replace_chars, local.defaults.replacement))
-  region             = var.aws_region
+  region             = "region"
   name               = lower(replace(coalesce(var.name, var.context.name, local.defaults.sentinel), local.regex_replace_chars, local.defaults.replacement))
   environment        = lower(replace(coalesce(var.environment, var.context.environment, local.defaults.sentinel), local.regex_replace_chars, local.defaults.replacement))
   type               = lower(replace(coalesce(var.type, var.context.type, local.defaults.sentinel), local.regex_replace_chars, local.defaults.replacement))

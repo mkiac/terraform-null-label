@@ -1,7 +1,7 @@
 locals {
 
   defaults = {
-    label_order = ["prefix", "type", "environment", "name", "attributes"]
+    label_order = ["prefix", "region", "type", "environment", "name", "attributes"]
     delimiter   = "-"
     replacement = ""
     # The `sentinel` should match the `regex_replace_chars`, so it will be replaced with the `replacement` value
@@ -15,6 +15,7 @@ locals {
   regex_replace_chars = coalesce(var.regex_replace_chars, var.context.regex_replace_chars)
 
   prefix             = lower(replace(coalesce(var.prefix, var.context.prefix, local.defaults.sentinel), local.regex_replace_chars, local.defaults.replacement))
+  region             = var.aws_region
   name               = lower(replace(coalesce(var.name, var.context.name, local.defaults.sentinel), local.regex_replace_chars, local.defaults.replacement))
   environment        = lower(replace(coalesce(var.environment, var.context.environment, local.defaults.sentinel), local.regex_replace_chars, local.defaults.replacement))
   type               = lower(replace(coalesce(var.type, var.context.type, local.defaults.sentinel), local.regex_replace_chars, local.defaults.replacement))
@@ -36,9 +37,8 @@ locals {
   ])
 
   tags_context = {
-    # For AWS we need `Name` to be disambiguated sine it has a special meaning
+    # For AWS we need `Name` to be disambiguated since it has a special meaning
     name        = local.id
-    prefix      = local.prefix
     environment = local.environment
     type        = local.type
     attributes  = local.id_context.attributes
@@ -47,8 +47,9 @@ locals {
   generated_tags = { for l in keys(local.tags_context) : title(l) => local.tags_context[l] if length(local.tags_context[l]) > 0 }
 
   id_context = {
-    name        = local.name
     prefix      = local.prefix
+    region      = local.region
+    name        = local.name
     environment = local.environment
     type        = local.type
     attributes  = lower(replace(join(local.delimiter, local.attributes), local.regex_replace_chars, local.defaults.replacement))
@@ -62,6 +63,7 @@ locals {
   output_context = {
     enabled             = local.enabled
     prefix              = local.prefix
+    region              = local.region
     name                = local.name
     environment         = local.environment
     type                = local.type

@@ -8,6 +8,11 @@ output "name" {
   description = "Normalized name"
 }
 
+output "region" {
+  value       = local.enabled ? local.region : ""
+  description = "Normalized region"
+}
+
 output "prefix" {
   value       = local.enabled ? local.prefix : ""
   description = "Normalized prefix"

@@ -1,25 +1,25 @@
-variable "namespace" {
+variable "prefix" {
   type        = string
   default     = ""
-  description = "Namespace, which could be your organization name or abbreviation, e.g. 'eg' or 'cp'"
+  description = "Prefix, any text you want at the beginning of the name"
 }
 
 variable "environment" {
   type        = string
   default     = ""
-  description = "Environment, e.g. 'prod', 'staging', 'dev', 'pre-prod', 'UAT'"
+  description = "Environment, e.g. 'prod', 'staging', 'dev', 'qa', 'uat'"
 }
 
-variable "stage" {
+variable "type" {
   type        = string
   default     = ""
-  description = "Stage, e.g. 'prod', 'staging', 'dev', OR 'source', 'build', 'test', 'deploy', 'release'"
+  description = "Type, e.g. 'shared', 'app'"
 }
 
 variable "name" {
   type        = string
   default     = ""
-  description = "Solution name, e.g. 'app' or 'jenkins'"
+  description = "Solution name, e.g. 'web' or 'jenkins'"
 }
 
 variable "enabled" {
@@ -31,7 +31,7 @@ variable "enabled" {
 variable "delimiter" {
   type        = string
   default     = "-"
-  description = "Delimiter to be used between `namespace`, `environment`, `stage`, `name` and `attributes`"
+  description = "Delimiter to be used between `prefix`, `environment`, `type`, `name` and `attributes`"
 }
 
 variable "attributes" {
@@ -54,9 +54,9 @@ variable "additional_tag_map" {
 
 variable "context" {
   type = object({
-    namespace           = string
+    prefix              = string
     environment         = string
-    stage               = string
+    type                = string
     name                = string
     enabled             = bool
     delimiter           = string
@@ -67,9 +67,9 @@ variable "context" {
     regex_replace_chars = string
   })
   default = {
-    namespace           = ""
+    prefix              = ""
     environment         = ""
-    stage               = ""
+    type                = ""
     name                = ""
     enabled             = true
     delimiter           = ""
@@ -91,6 +91,6 @@ variable "label_order" {
 variable "regex_replace_chars" {
   type        = string
   default     = "/[^a-zA-Z0-9-]/"
-  description = "Regex to replace chars with empty string in `namespace`, `environment`, `stage` and `name`. By default only hyphens, letters and digits are allowed, all other chars are removed"
+  description = "Regex to replace chars with empty string in `prefix`, `environment`, `stage` and `name`. By default only hyphens, letters and digits are allowed, all other chars are removed"
 }
 

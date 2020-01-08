@@ -1,7 +1,7 @@
 locals {
 
   defaults = {
-    label_order = ["namespace", "environment", "stage", "name", "attributes"]
+    label_order = ["prefix", "type", "environment", "name", "attributes"]
     delimiter   = "-"
     replacement = ""
     # The `sentinel` should match the `regex_replace_chars`, so it will be replaced with the `replacement` value
@@ -14,10 +14,10 @@ locals {
   enabled             = var.enabled
   regex_replace_chars = coalesce(var.regex_replace_chars, var.context.regex_replace_chars)
 
+  prefix             = lower(replace(coalesce(var.prefix, var.context.prefix, local.defaults.sentinel), local.regex_replace_chars, local.defaults.replacement))
   name               = lower(replace(coalesce(var.name, var.context.name, local.defaults.sentinel), local.regex_replace_chars, local.defaults.replacement))
-  namespace          = lower(replace(coalesce(var.namespace, var.context.namespace, local.defaults.sentinel), local.regex_replace_chars, local.defaults.replacement))
   environment        = lower(replace(coalesce(var.environment, var.context.environment, local.defaults.sentinel), local.regex_replace_chars, local.defaults.replacement))
-  stage              = lower(replace(coalesce(var.stage, var.context.stage, local.defaults.sentinel), local.regex_replace_chars, local.defaults.replacement))
+  type               = lower(replace(coalesce(var.type, var.context.type, local.defaults.sentinel), local.regex_replace_chars, local.defaults.replacement))
   delimiter          = coalesce(var.delimiter, var.context.delimiter, local.defaults.delimiter)
   label_order        = length(var.label_order) > 0 ? var.label_order : (length(var.context.label_order) > 0 ? var.context.label_order : local.defaults.label_order)
   additional_tag_map = merge(var.context.additional_tag_map, var.additional_tag_map)
@@ -38,9 +38,9 @@ locals {
   tags_context = {
     # For AWS we need `Name` to be disambiguated sine it has a special meaning
     name        = local.id
-    namespace   = local.namespace
+    prefix      = local.prefix
     environment = local.environment
-    stage       = local.stage
+    type        = local.type
     attributes  = local.id_context.attributes
   }
 
@@ -48,9 +48,9 @@ locals {
 
   id_context = {
     name        = local.name
-    namespace   = local.namespace
+    prefix      = local.prefix
     environment = local.environment
-    stage       = local.stage
+    type        = local.type
     attributes  = lower(replace(join(local.delimiter, local.attributes), local.regex_replace_chars, local.defaults.replacement))
   }
 
@@ -61,10 +61,10 @@ locals {
   # Context of this label to pass to other label modules
   output_context = {
     enabled             = local.enabled
+    prefix              = local.prefix
     name                = local.name
-    namespace           = local.namespace
     environment         = local.environment
-    stage               = local.stage
+    type                = local.type
     attributes          = local.attributes
     tags                = local.tags
     delimiter           = local.delimiter

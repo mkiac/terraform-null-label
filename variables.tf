@@ -4,7 +4,7 @@ variable "prefix" {
   description = "Prefix, any text you want at the beginning of the name"
 }
 
-variable "aws_region" {
+variable "region" {
   type        = string
   default     = ""
   description = "AWS Region"

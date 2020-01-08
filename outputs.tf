@@ -8,14 +8,14 @@ output "name" {
   description = "Normalized name"
 }
 
-output "namespace" {
-  value       = local.enabled ? local.namespace : ""
-  description = "Normalized namespace"
+output "prefix" {
+  value       = local.enabled ? local.prefix : ""
+  description = "Normalized prefix"
 }
 
-output "stage" {
-  value       = local.enabled ? local.stage : ""
-  description = "Normalized stage"
+output "type" {
+  value       = local.enabled ? local.type : ""
+  description = "Normalized type"
 }
 
 output "environment" {
@@ -30,7 +30,7 @@ output "attributes" {
 
 output "delimiter" {
   value       = local.enabled ? local.delimiter : ""
-  description = "Delimiter between `namespace`, `environment`, `stage`, `name` and `attributes`"
+  description = "Delimiter between `prefix`, `environment`, `type`, `name` and `attributes`"
 }
 
 output "tags" {
